@@ -49,7 +49,7 @@ $ pnpm run test:cov
 
 ## API Documentation
 
-Once the application is running, you can access the Swagger API documentation at `http://localhost:3000/api`.
+Once the application is running, you can access the Swagger API documentation at `http://localhost:3000/docs`.
 
 ## Compodoc Documentation
 
