@@ -17,9 +17,9 @@ export class ShortenerService {
      * @param {PrismaService} prismaService - The PrismaService instance.
      * @memberof ShortenerService
      */
-    constructor(private readonly prismaService: PrismaService) {}
+    constructor(private readonly prismaService: PrismaService) { }
 
-    
+
     /**
      * Shortens a URL and returns the shortened URL
      * @param url The URL to shorten
@@ -52,5 +52,25 @@ export class ShortenerService {
             url: `https://${host}/${link.shortUrl}`,
             linkId: link.id,
         };
+    }
+
+    /**
+     * Gets the short URL for a given link.
+     * @param linkId The ID of the link.
+     * @returns The short URL for a given link.
+     * @example
+     * getShortUrl(1)
+     */
+    async getShortUrl(linkId: number, request: Request) {
+        const link = await this.prismaService.link.findUnique({
+            where: { id: linkId },
+        });
+
+        if (!link) {
+            return null;
+        }
+
+        const url = `https://${request.headers.host}/${link.shortUrl}`;
+        return { url, linkId };
     }
 }

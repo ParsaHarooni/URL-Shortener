@@ -36,7 +36,7 @@ export class VisitsController {
     @ApiQuery({ name: 'linkId', description: 'ID of the link' })
     @ApiResponse({ status: 200, description: 'Number of visits and unique IP addresses and user agents for a given link' })
     @ApiResponse({ status: 404, description: 'Link not found' })
-    @Get('data')
+    @Get('unique')
     async getVisits(@Query('linkId', ParseIntPipe) linkId: number) {
         const visits = await this.visitsService.getVisits(linkId);
         if (!visits) {
@@ -83,5 +83,40 @@ export class VisitsController {
         }
 
         return visitsTimeline;
+    }
+
+
+    /**
+     * Gets the visits for a given link and optional filters.
+     * @param {number} linkId - ID of the link.
+     * @param {string} ipAddress - IP address.
+     * @param {string} userAgent - User agent.
+     * @returns {Promise<object>} Visits for a given link and optional filters.
+     * @throws {NotFoundException} If the link is not found.
+     * @route GET /visits/filter
+     */
+    @ApiOperation({ summary: 'Get the visits for a given link and optional filters' })
+    @ApiQuery({ name: 'linkId', description: 'ID of the link', required: true })
+    @ApiQuery({ name: 'ipAddress', description: 'IP address', required: false })
+    @ApiQuery({ name: 'userAgent', description: 'User agent', required: false })
+    @ApiResponse({ status: 200, description: 'Visits for a given link and optional filters' })
+    @ApiResponse({ status: 404, description: 'Link not found' })
+    @Get('filter')
+    async getVisitsFilter(
+        @Query('linkId', ParseIntPipe) linkId: number,
+        @Query('ipAddress') ipAddress?: string,
+        @Query('userAgent') userAgent?: string,
+    ) {
+        const visits = await this.visitsService.getVisitsFilter(linkId, ipAddress, userAgent);
+
+        if (visits === null) {
+            throw new NotFoundException('Link not found');
+        }
+
+        if (visits.length === 0) {
+            return { message: 'No visits found for this link', data: [] };   
+        }
+
+        return visits;
     }
 }

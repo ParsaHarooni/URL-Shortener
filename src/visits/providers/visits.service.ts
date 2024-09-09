@@ -55,6 +55,14 @@ export class VisitsService {
                 return { count: visitCount, ipAddresses, userAgents };
         }
 
+        /**
+         * This function gets the visits timeline for a given link with optional time filters.
+         * @param linkId The ID of the link.
+         * @param filters Optional time filters (lastYears, lastMonths, lastDays, lastHours, lastMinutes).
+         * @returns The filtered visits timeline for a given link.
+         * @example
+         * getVisitsTimeline(1, { lastDays: 1, lastMonths: 5, lastYears: 2 })
+         */
         async getVisitsTimeline(linkId: number, filters?: {
                 lastYears?: number;
                 lastMonths?: number;
@@ -102,5 +110,42 @@ export class VisitsService {
                 }));
 
                 return visitsTimeline;
+        }
+
+        /**
+         * Gets the visits for a given link and optional filters.
+         * @param linkId The ID of the link.
+         * @param ipAddress IP address.
+         * @param userAgent User agent.
+         * @returns Visits for a given link and optional filters.
+         * @example
+         * getVisitsFilter(1, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36')
+         */
+        async getVisitsFilter(linkId: number, ipAddress: string, userAgent: string) {
+                const link = await this.prismaService.link.findFirst({
+                        where: { id: linkId },
+                });
+
+                if (!link) {
+                        return null;
+                }
+
+                const visits = await this.prismaService.visit.findMany({
+                        where: {
+                                linkId: link.id,
+                                ipAddress,
+                                userAgent,
+                        },
+                        orderBy: {
+                                createdAt: 'asc',
+                        },
+                        select: {
+                                createdAt: true,
+                                ipAddress: true,
+                                userAgent: true,
+                        },
+                });
+
+                return visits;
         }
 }
