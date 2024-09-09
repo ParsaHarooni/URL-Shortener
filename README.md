@@ -13,7 +13,6 @@ This project is a URL shortener service built using the [Nest](https://github.co
 - Shorten long URLs to compact, easy-to-share links
 - Redirect users from shortened links to original URLs
 - Track click statistics for shortened links
-- User authentication and management
 - API for programmatic access to URL shortening services
 
 ## Project setup
