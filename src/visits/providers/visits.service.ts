@@ -55,16 +55,6 @@ export class VisitsService {
                 return { count: visitCount, ipAddresses, userAgents };
         }
 
-        /**
-         * Gets the visits timeline for a given link with optional time filters.
-         * @param {number} linkId - The ID of the link.
-         * @param {object} filters - Optional time filters (lastYears, lastMonths, lastDays, lastHours, lastMinutes).
-         * @returns {Promise<object>} The filtered visits timeline for a given link.
-         * @returns {Promise<null>} If the link is not found.
-         * @example
-         * getVisitsTimeline(1, { lastDays: 1, lastMonths: 5, lastYears: 2 })
-         * @route GET /visits/timeline
-         */
         async getVisitsTimeline(linkId: number, filters?: {
                 lastYears?: number;
                 lastMonths?: number;
@@ -80,22 +70,21 @@ export class VisitsService {
                         return null;
                 }
 
-                let startDate = new Date();
-                if (filters) {
+                let whereClause: any = { linkId: link.id };
+
+                if (filters && Object.values(filters).some(value => value !== undefined)) {
+                        let startDate = new Date();
                         if (filters.lastYears) startDate.setFullYear(startDate.getFullYear() - filters.lastYears);
                         if (filters.lastMonths) startDate.setMonth(startDate.getMonth() - filters.lastMonths);
                         if (filters.lastDays) startDate.setDate(startDate.getDate() - filters.lastDays);
                         if (filters.lastHours) startDate.setHours(startDate.getHours() - filters.lastHours);
                         if (filters.lastMinutes) startDate.setMinutes(startDate.getMinutes() - filters.lastMinutes);
+
+                        whereClause.createdAt = { gte: startDate };
                 }
 
                 const visits = await this.prismaService.visit.findMany({
-                        where: {
-                                linkId: link.id,
-                                createdAt: {
-                                        gte: startDate
-                                }
-                        },
+                        where: whereClause,
                         orderBy: {
                                 createdAt: 'asc',
                         },
@@ -113,6 +102,5 @@ export class VisitsService {
                 }));
 
                 return visitsTimeline;
-
         }
 }
