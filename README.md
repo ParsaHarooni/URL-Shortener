@@ -67,7 +67,7 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 
 ## Stay in touch
 
-- Author - [Parsa Harooni]
+- Author - Parsa Harooni
 - Website - https://prsa.world
 
 ## License
