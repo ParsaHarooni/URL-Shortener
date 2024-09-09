@@ -2,8 +2,21 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from './prisma/prisma.service';
 import { Request } from 'express';
 
+/**
+ * Service for resolving shortened URLs.
+ * @class AppService
+ * @extends {PrismaService}
+ * @example
+ * const appService = new AppService();
+ * appService.resolve('https://localhost:3000/shortener/abc123');
+ */
 @Injectable()
 export class AppService {
+    /**
+     * Creates an instance of AppService.
+     * @param {PrismaService} prismaService - The PrismaService instance.
+     * @memberof AppService
+     */
   constructor(
     private readonly prismaService: PrismaService,
   ) {}

@@ -1,8 +1,21 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 
+/**
+ * Service for getting visits data.
+ * @class VisitsService
+ * @extends {PrismaService}
+ * @example
+ * const visitsService = new VisitsService();
+ * visitsService.getVisits(1);
+ */
 @Injectable()
 export class VisitsService {
+    /**
+     * Creates an instance of VisitsService.
+     * @param {PrismaService} prismaService - The PrismaService instance.
+     * @memberof VisitsService
+     */
     constructor(
         private readonly prismaService: PrismaService,
     ) { }

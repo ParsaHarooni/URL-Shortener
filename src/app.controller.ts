@@ -3,6 +3,14 @@ import { AppService } from './app.service';
 import { ApiOperation, ApiParam, ApiResponse } from '@nestjs/swagger';
 import { Response, Request } from 'express';
 
+/**
+ * Controller for the application.
+ * @class AppController
+ * @extends {AppService}
+ * @example
+ * const appController = new AppController();
+ * appController.redirect('https://example.com', { headers: { host: 'localhost:3000' } });
+ */
 @Controller()
 export class AppController {
   constructor(private readonly appService: AppService) {}

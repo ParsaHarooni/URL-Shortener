@@ -1,8 +1,16 @@
 import { Controller, Get, HttpException, HttpStatus, Param, Query, Req, Res } from '@nestjs/common';
 import { ShortenerService } from './providers/shortener.service';
 import { Request } from 'express';
-import { Response } from 'express';
 import { ApiOperation, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
+
+/**
+ * Controller for shortening URLs.
+ * @class ShortenerController
+ * @extends {ShortenerService}
+ * @example
+ * const shortenerController = new ShortenerController();
+ * shortenerController.shorten('https://example.com', { headers: { host: 'localhost:3000' } });
+ */
 
 @ApiTags('Shortener')
 @Controller('shortener')
